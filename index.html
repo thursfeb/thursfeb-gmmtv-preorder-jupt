@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>GMMTV Pre-Order for Fansign</title>
+  <meta name="viewport" content="width=1200">
+  <link href="https://fonts.googleapis.com/css?family=Sarabun:400,700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Sarabun', sans-serif; background: #f6f3fc; margin: 0; color: #2e1e4d;}
+    .container { max-width: 1100px; margin: 32px auto; padding: 28px; background: #fff; border-radius: 18px; box-shadow: 0 4px 18px #e7dcfa;}
+    h1 { font-size: 2.5rem; margin-bottom: 8px; text-align: center; color: #7b36c2;}
+    .red-note { color: #aa1780; background: #fbe8ff; font-size: 1.1rem; border-radius: 18px; padding: 14px 8px; margin-bottom: 18px; font-weight: bold; text-align:center;}
+    .star-note { color: #aa1780; font-size: 2rem; font-weight: bold; text-align: center;}
+    .products { display: grid; grid-template-columns: repeat(4,1fr); gap: 28px;}
+    .product-card { background: #f5edfc; border-radius: 14px; padding: 18px 12px; text-align: center; box-shadow: 0 2px 8px #e8d8fa;}
+    .product-card img { width: 180px; height: 270px; object-fit: cover; border-radius: 12px; border: 1.5px solid #cbb4ee;}
+    .prod-title { font-weight: bold; margin-top: 9px; font-size: 1.28rem; color: #7b36c2;}
+    .prod-price { color: #9b4bda; font-weight: bold; font-size: 1.18rem;}
+    select, input[type='number'] { padding: 7px 10px; border-radius: 7px; border: 1.5px solid #dbcbf7; font-size: 1rem; margin-top:8px;}
+    .btn-add { background: #c29bfd; color: #fff; border: none; padding: 7px 14px; border-radius: 8px; margin: 12px 0 0 0; cursor: pointer; font-weight: bold;}
+    .btn-add:disabled { background: #bbb; }
+    .btn-remove { background: #b84dc9; color: #fff; border: none; padding: 3px 11px; border-radius: 6px; margin-left: 10px; font-size: .9rem; cursor: pointer;}
+    .cart-section { background: #f5eaff; border-radius: 16px; margin-top: 38px; padding: 22px; box-shadow: 0 2px 8px #e4e4e4;}
+    .cart-title { font-size: 1.5rem; font-weight: bold; margin-bottom: 10px; color:#7b36c2;}
+    .cart-list { margin: 0 0 8px 0; }
+    .cart-item { font-size: 1.09rem; margin: 8px 0; display: flex; align-items: center;}
+    .cart-item select, .cart-item input { margin: 0 8px;}
+    .cart-sum { color: #9b4bda; font-size: 1.18rem; font-weight: bold; text-align:right;}
+    .btn-copy { background: #f3dbff; color: #7b36c2; border: none; padding: 6px 14px; border-radius: 7px; font-weight: bold; margin-left: 10px; cursor: pointer;}
+    .pay-section { margin-top: 36px; background: #ece5fb; border-radius: 16px; padding: 18px 10px; text-align: center;}
+    .pay-number { color: #a53acf; font-size: 2.1rem; font-weight: bold; margin-bottom: 6px;}
+    .pay-name { color: #a53acf; font-size: 1.5rem; font-weight:bold;}
+    .pay-total { color: #7b36c2; font-size: 1.22rem; font-weight: bold;}
+    .form-section { margin-top: 18px; background: #f6e6fc; border-radius: 15px; padding: 14px;}
+    .form-link-btn { background: #a53acf; color: #fff; font-weight: bold; border: none; border-radius: 9px; font-size: 1.1rem; padding: 10px 22px; margin: 16px 0 20px 0; cursor: pointer;}
+    textarea {width:95%;margin-top:10px;height:80px;background:#fff7ee;border-radius:9px;padding:8px;font-size:1rem;}
+    .shipping-select {margin:16px 0 20px 0; padding:16px 18px; border-radius:12px; background:#efe3fc; text-align:center;}
+    .shipping-radio {margin:0 10px;}
+    .shipping-dropdown {margin-top:10px;}
+    @media (max-width: 1100px){
+      .products { grid-template-columns: repeat(2,1fr);}
+    }
+    @media (max-width: 700px){
+      .container{padding: 6px;}
+      .products{grid-template-columns:1fr;}
+      .pay-number,.pay-name{font-size:1.1rem;}
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="star-note">* สินค้าทุกออเดอร์ลด 20% *</div>
+  <div class="red-note">สินค้าทั้งหมดที่ซื้อจะไม่ได้รับคูปองไซน์</div>
+  <h1>Pre-Order for Fansign</h1>
+
+  <!-- สินค้า -->
+  <div class="products" id="products"></div>
+
+  <!-- เลือกการจัดส่ง -->
+  <div class="shipping-select" id="shippingSelect" style="display:none;">
+    <div style="font-size:1.1rem; margin-bottom:8px;"><b>เลือกรูปแบบรับสินค้า</b></div>
+    <label class="shipping-radio">
+      <input type="radio" name="shipping" value="nadrub" onchange="setShipping()"> นัดรับ
+    </label>
+    <label class="shipping-radio">
+      <input type="radio" name="shipping" value="post" onchange="setShipping()"> ไปรษณีย์ (+40฿)
+    </label>
+    <div id="nadrubSelect" class="shipping-dropdown" style="display:none;">
+      <select id="nadrubDropdown" onchange="setShippingDropdown()" style="padding:8px 12px; border-radius:7px; border:1.5px solid #d9d9d9;">
+        <option value="">เลือกวัน/สถานที่นัดรับ</option>
+        <option value="27/07 งานหนังสือ">27/07 ที่งานหนังสือ</option>
+        <option value="FANCON JU MARK 11/08">FANCON JU MARK 11/08</option>
+        <option value="FANCON JUMARK 12/08">FANCON JUMARK 12/08</option>
+      </select>
+    </div>
+    <div style="color:#aaa;font-size:.98rem;margin-top:6px;">*ต้องเลือกวิธีรับสินค้า/จัดส่งก่อนชำระเงิน</div>
+  </div>
+
+  <!-- ตะกร้า -->
+  <div class="cart-section" id="cartSection" style="display:none;">
+    <div class="cart-title">สรุปรายการสั่งซื้อ</div>
+    <div class="cart-list" id="cartList"></div>
+    <div class="cart-sum" id="cartSum"></div>
+    <button class="btn-copy" onclick="copyOrderSummary()">Copy รายการ</button>
+  </div>
+
+  <!-- พร้อมเพย์ -->
+  <div class="pay-section" id="paySection" style="display:none;">
+    <div class="pay-number">พร้อมเพย์: <b id="ppNum">0836181375</b> <button class="btn-copy" onclick="copyText('0836181375')">Copy</button></div>
+    <div class="pay-name">SARINPORN S.</div>
+    <div class="pay-total" id="payTotal"></div>
+  </div>
+
+  <!-- แจ้งเตือนฟอร์ม -->
+  <div class="form-section" id="formSection" style="display:none;">
+    <div>
+      👉 เมื่อโอนแล้ว <a href="https://forms.gle/rs8wSC7psGdwheE39" class="form-link-btn" target="_blank">กรอกฟอร์มยืนยันโอนเงินที่นี่</a>
+    </div>
+    <textarea id="orderSummaryBox"></textarea>
+    <div style="margin-top:10px;">
+      <button class="btn-copy" onclick="copyOrderSummary()">Copy รายการ</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Mascots
+const mascotsGMMTV = [
+  "KINGMAN", "BABII", "POLCASAN", "MR. SATURNWORLD", "PAODY",
+  "TOMAFOX", "JAIDEE", "AVOCEAN", "SAMRUAY", "JUMMO", "GUINZLY",
+  "ANGELO", "WESLEY", "MUVMUV", "META", "CERI", "PERMPOON",
+  "LUNAR", "ANY", "NILKHNAKE", "SHYLE", "NONGNOOONG", "LYKOU"
+];
+
+// เฉพาะ “คู่” (BL/GL/Side)
+const coupleNames = [
+  "OFFGUN", "TAYNEW", "BRIGHTWIN", "EARTHMIX", "PONDPHUWIN", "OHMNANON",
+  "FORCEBOOK", "JOONGDUNK", "JIMMYSEA", "FIRSTKHAOTUNG", "GEMINIFOURTH",
+  "WINNYSATANG", "GREATINN", "SEAKEEN", "PERTHSANTA", "WILLIAMEST", "JUNIORMARK",
+  "JOSSGAWIN", "MARKOHM", "AOUBOOM", "SURFJAVA", "LUKEMICK", "CHOKUNASTON",
+  "MILKLOVE", "EMIBONNIE", "NAMTANFILM", "VIEWMIM", "JUNEMEWNICH",
+  "JAMIEEARN", "KENPAUL", "PODPAPANG", "ALMONDPROGRESS"
+];
+
+const boxOptions = ["BOX A", "BOX B"];
+
+// ลด 20% (ราคาเต็ม → ราคาหลังลด)
+function sale(p) { return Math.round(p * 0.8); }
+
+// เรียงตามโปสเตอร์
+const PRODUCTS = [
+  {id: "sticker_set", title: "Sticker Set", price: sale(220), image: "images/sticker_set.jpg", select: mascotsGMMTV},
+  {id: "hair_band", title: "Hair Band", price: sale(490), image: "images/hair_band.jpg", select: mascotsGMMTV},
+  {id: "huggy_bag", title: "Huggy Bag", price: sale(590), image: "images/huggy_bag.jpg", select: mascotsGMMTV},
+  {id: "sticky_fabric", title: "Sticky Fabric", price: sale(390), image: "images/sticky_fabric.jpg", select: mascotsGMMTV},
+  {id: "clear_pouch", title: "Clear Pouch", price: sale(350), image: "images/clear_pouch.jpg", select: mascotsGMMTV},
+  {id: "charm_illusion_tote", title: "Fandom Character Charm Illusion Tote Bag", price: sale(890), image: "images/charm_illusion_tote.jpg", select: mascotsGMMTV},
+  {id: "patchy_illusion_tote", title: "Fandom Character Patchy Illusion Tote Bag", price: sale(890), image: "images/patchy_illusion_tote.jpg", select: mascotsGMMTV},
+  {id: "phone_grippy", title: "Fandom Phone Grippy (Random)", price: sale(290), image: "images/phone_grippy.jpg", select: boxOptions},
+  {id: "acrylic_keychain", title: "Customizable Acrylic Keychain", price: sale(350), image: "images/acrylic_keychai.jpg", select: coupleNames},
+  {id: "collectible_card_album", title: "Collectible Card Album", price: sale(300), image: "images/card_album.jpg", select: coupleNames},
+  {id: "that_summer", title: "That Summer (นิยาย)", price: sale(450), image: "images/that_summer.jpg"},
+  {id: "burnout", title: "Burnout Syndrome (นิยาย)", price: sale(450), image: "images/burnout.jpg"},
+  {id: "last_twilight", title: "Last Twilight (นิยาย)", price: sale(450), image: "images/last_twilight.jpg"},
+  {id: "thamepo", title: "Thamepo (Heart That Skips a Beat Novel)", price: sale(490), image: "images/thamepo.jpg"},
+  {id: "ceri_doll_keychain", title: "Ceri Doll Keychain", price: sale(790), image: "images/ceri_doll_keychain.jpg"},
+  {id: "nilkhnake_doll_keychain", title: "Nilkhnake Doll Keychain", price: sale(790), image: "images/nilkhnake_doll_keychain.jpg"},
+];
+
+let cart = [];
+let shippingType = "";
+let nadrubDate = "";
+function renderProducts(){
+  const container = document.getElementById('products');
+  container.innerHTML = '';
+  PRODUCTS.forEach(prod => {
+    let prodSelect = '';
+    if(prod.select){
+      prodSelect = `
+        <select id="select_${prod.id}" style="margin-top:10px;width:95%;">
+          <option value="">${prod.select===boxOptions ? 'เลือก BOX A หรือ BOX B' : 'เลือกชื่อ'}</option>
+          ${prod.select.map(a=>`<option value="${a}">${a}</option>`).join("")}
+        </select>
+      `;
+    }
+    container.innerHTML += `
+      <div class="product-card">
+        <img src="${prod.image}" alt="${prod.title}">
+        <div class="prod-title">${prod.title}</div>
+        <div class="prod-price">${prod.price}฿</div>
+        ${prodSelect || ""}
+        <button class="btn-add" onclick="addToCart('${prod.id}')">เพิ่ม</button>
+      </div>
+    `;
+  });
+}
+window.onload = renderProducts;
+
+function addToCart(pid){
+  const prod = PRODUCTS.find(x=>x.id===pid);
+  let selectVal = "";
+  if(prod.select){
+    selectVal = document.getElementById(`select_${pid}`).value;
+    if(!selectVal){ alert(prod.select===boxOptions ? "กรุณาเลือก BOX" : "กรุณาเลือกชื่อในรายการ"); return;}
+  }
+  const same = cart.find(x=>x.id===pid && x.option===selectVal);
+  if(same){
+    same.qty += 1;
+  }else{
+    cart.push({id:pid, name:prod.title, price:prod.price, option:selectVal, qty:1});
+  }
+  renderCart();
+}
+
+function renderCart(){
+  const cartList = document.getElementById("cartList");
+  const cartSection = document.getElementById("cartSection");
+  const paySection = document.getElementById("paySection");
+  const formSection = document.getElementById("formSection");
+  const shippingSelect = document.getElementById("shippingSelect");
+  cartSection.style.display = cart.length ? "" : "none";
+  paySection.style.display = cart.length ? "" : "none";
+  formSection.style.display = cart.length ? "" : "none";
+  shippingSelect.style.display = cart.length ? "" : "none";
+  if(!cart.length) return;
+  cartList.innerHTML = '';
+  let sum = 0;
+  cart.forEach((item,i)=>{
+    sum += item.price * item.qty;
+    cartList.innerHTML += `
+      <div class="cart-item">
+        ${item.name}${item.option?` <span style="color:#7b36c2;">(${item.option})</span>`:""} 
+        &nbsp; x <input type="number" min="1" max="99" value="${item.qty}" style="width:40px" onchange="updateQty(${i},this.value)">
+        <span style="color:#b84dc9;font-weight:bold;">= ${item.price*item.qty}฿</span>
+        <button class="btn-remove" onclick="removeCart(${i})">ลบ</button>
+      </div>
+    `;
+  });
+
+  // Shipping option
+  let shipText = '';
+  let shippingFee = 0;
+  if(shippingType === "post"){
+    shipText = "วิธีรับสินค้า: ไปรษณีย์ (+40฿)";
+    shippingFee = 40;
+  } else if(shippingType === "nadrub" && nadrubDate){
+    shipText = `วิธีรับสินค้า: นัดรับ (${nadrubDate})`;
+  } else {
+    shipText = "กรุณาเลือกวิธีรับสินค้า/จัดส่ง";
+  }
+  document.getElementById("cartSum").innerHTML = `รวมทั้งหมด: ${sum + shippingFee} บาท<br><span style="font-size:1rem;color:#7b36c2">${shipText}</span>`;
+  document.getElementById("payTotal").innerHTML = `ยอดที่ต้องโอน: ${sum + shippingFee} บาท`;
+
+  // Order summary
+  document.getElementById("orderSummaryBox").value = cart.map(item=>{
+    return `${item.name}${item.option?` (${item.option})`:""} x ${item.qty} = ${item.price*item.qty} บาท`;
+  }).join('\n') + `\n${shipText}\nรวมทั้งหมด: ${sum + shippingFee} บาท`;
+}
+
+function updateQty(idx, val){
+  let v = parseInt(val);
+  if(isNaN(v)||v<1) v=1;
+  cart[idx].qty = v;
+  renderCart();
+}
+function removeCart(idx){
+  cart.splice(idx,1);
+  renderCart();
+}
+function copyOrderSummary(){
+  const t = document.getElementById("orderSummaryBox");
+  t.select(); t.setSelectionRange(0,9999);
+  document.execCommand('copy');
+}
+function copyText(text){
+  navigator.clipboard.writeText(text);
+}
+
+// Shipping logic
+function setShipping(){
+  const radioPost = document.querySelector("input[name='shipping'][value='post']");
+  const radioNadrub = document.querySelector("input[name='shipping'][value='nadrub']");
+  let nadrubDiv = document.getElementById('nadrubSelect');
+  nadrubDate = "";
+  if(radioPost.checked){
+    shippingType = "post";
+    nadrubDiv.style.display = "none";
+  }
+  else if(radioNadrub.checked){
+    shippingType = "nadrub";
+    nadrubDiv.style.display = "";
+  }
+  else{
+    shippingType = "";
+    nadrubDiv.style.display = "none";
+  }
+  renderCart();
+}
+function setShippingDropdown(){
+  nadrubDate = document.getElementById("nadrubDropdown").value;
+  renderCart();
+}
+</script>
+</body>
+</html>
